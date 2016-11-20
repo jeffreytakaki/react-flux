@@ -1,59 +1,8 @@
-header {
-    background-color: #4cbbc6;
-    height: 60px;
-    padding: 10px 0;
+nav {
+/*	height: auto;
+	width: 100%;*/
+	background-color: #cceeff
 }
-
-header img {
-	width: auto;
-	max-height: 50px;
-	margin: 0 5%;
-}
-
-input.recipe-lookup {
-    height: 40px;
-    width: 50%;
-    margin: 2% 0 0;
-}
-
-.fa {
-    cursor: pointer;
-	font-size: 1.5em;
-}
-
-img {
-	width: 100%;
-	height: auto;
-}
-
-.caption-limit-ingredients {
-	font-size: .75em;
-}
-
-.align-center {
-	text-align: center;
-}
-
-.search-container {
-	margin-bottom: 5%;
-}
-
-.savedItem-col {
-	min-height: 6vw;
-}
-
-.savedItem-col h4 {
-	font-size: 1.2rem;
-}
-
-
-
-
-@media screen and (max-width: 768px) {
-	.container {
-		text-align: center;
-	}
-   input.recipe-lookup {
-	    width: 100%;
-    }
+.react-col {
+	padding: 0;
 }
