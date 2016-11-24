@@ -39,7 +39,11 @@ input.recipe-lookup {
 }
 
 @media screen and (max-width: 767px) {
+	.react-col {
+		text-align: center;
+	}
     .recipe-col {
         text-align: center;
     }
+
 }
