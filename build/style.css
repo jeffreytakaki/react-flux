@@ -1,8 +1,16 @@
 nav {
-/*	height: auto;
-	width: 100%;*/
+	padding: 2px;
 	background-color: #cceeff
 }
 .react-col {
 	padding: 0;
+}
+
+.nav-link-col {
+    display: inline-block;
+    padding: 0 4%;
+}
+
+button.sign-in-button {
+	margin-right: 2%;
 }

@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "firebase": "^3.6.1",
     "history": "^1.17.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",

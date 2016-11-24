@@ -5,20 +5,14 @@ export default class Sidebar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            
+            savedRecipes: []
         }
 
     }
-
- 
-
+    
     render () {
         return (
-            <ul>
-                <li><Link to="home">Home</Link></li>
-                <li><Link to="profile">Profile</Link></li>
-            </ul>
-            
+            <div>sidebar</div>
         )
     }
 }
