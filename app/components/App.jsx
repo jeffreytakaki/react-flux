@@ -50,12 +50,6 @@ export default class App extends React.Component {
 
     render () {
         let self = this
-        // let children = React.Children.map(this.props.children, function (child) {
-        //     return React.cloneElement(child, {    
-        //         saveRecipeFn: self.state.saveRecipeFn,
-        //         state: self.state
-        //     })
-        // })
 
         return (
             <div className="container-fluid">

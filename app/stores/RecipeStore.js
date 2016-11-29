@@ -23,41 +23,39 @@ class RecipeStore extends EventEmitter {
     }
 
     login(action) {
-        let self = this
-        firebaseSignIn().then(user => {
-            this.user = user
-            this.emit("userChange")        
-        })
-    }
-
-    getSaved(user) {
-        let self = this
-        getSaved(this.user.uid).then(saved => {
-
-            this.saved = saved
-        })
+        if(!firebase.auth().currentUser) {
+            firebaseSignIn().then(user => {
+                this.user = user
+                getSaved(this.user.uid).then(results => {
+                    this.saved = results
+                    this.emit("userChange")        
+                })
+            })
+        } else {
+            firebase.auth().signOut()
+        }
 
     }
 
-  createRecipe(data) {
-   console.log(data)
+    createRecipe(data) {
+        console.log(data)
 
-    this.saved.push({
-  		image: data.data.image,
-		title: data.data.title,
-		url: data.data.url,
-		recipe_id: data.data.key,
-		completed: false
-    });
+        this.saved.push({
+            image: data.data.image,
+            title: data.data.title,
+            url: data.data.url,
+            recipe_id: data.data.key,
+            completed: false
+        });
 
-    this.emit("change");
-  }
+        this.emit("change");
+    }
 
   getSearchResults() {
     return this.recipes;
   }
 
-  getSaved() {
+  retrieveSaved() {
     return this.saved
   }
 
@@ -76,13 +74,8 @@ class RecipeStore extends EventEmitter {
         this.createRecipe(action);
         break;
       }
-      case "RECEIVE_RECIPE": {
-        this.recipes = action.recipes;
-        this.emit("change");
-        break;
-      }
-      case "RECEIVE_SAVED": {
-        this.saved = action.user;
+      case "RETRIEVE_RECIPE": {
+        this.retrieveRecipes(this.user.uid)
         this.emit("change");
         break;
       }
