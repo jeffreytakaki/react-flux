@@ -1,6 +1,7 @@
 import React from 'react'
 import RecipeItem from '../components/RecipeItem.jsx'
-import getRecipes from '../utils/getRecipes'
+import RecipeStore from '../stores/RecipeStore'
+import * as RecipeAction from "../actions/RecipeActions"
     
 export default class Home extends React.Component {
     constructor(props) {
@@ -13,6 +14,13 @@ export default class Home extends React.Component {
         this.saveIngredients = this.saveIngredients.bind(this)
         this.searchRecipes = this.searchRecipes.bind(this)
         this.saveRecipe = this.saveRecipe.bind(this)
+        this.displaySearch = this.displaySearch.bind(this)
+
+        
+    }
+
+    componentWillMount() {
+        RecipeStore.on('search', this.displaySearch)
     }
 
     saveIngredients(event) {
@@ -22,16 +30,18 @@ export default class Home extends React.Component {
     }
 
     searchRecipes() {
-        let query = this.state.ingredients
-        getRecipes(query).then(search => {
-            this.setState({
-                recipes: search
-            })
-        })
+        let search = this.state.ingredients
+        RecipeAction.searchRecipe(search)
+    }
+
+    displaySearch() {
+       this.setState({
+            recipes: RecipeStore.getSearchResults()
+       })
     }
 
     saveRecipe(build) {
-        console.log('home.jsx save recipe')
+        this.props.saveRecipeFn(build)
     } 
 
     render () {
