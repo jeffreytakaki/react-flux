@@ -1,3 +1,9 @@
+/* Global */
+
+body {
+	font-family: 'Raleway', sans-serif;
+}
+
 /* Start Nav Styling */
 nav {
 	padding: 2px;
@@ -6,6 +12,7 @@ nav {
 }
 .react-col {
 	padding: 0;
+
 }
 
 .nav-link-col {
@@ -15,6 +22,18 @@ nav {
 
 button.sign-in-button {
 	margin-right: 2%;
+}
+
+/* General Stylign */
+
+span.calories-bold {
+	font-size: 2em;
+	color: #33cc33;
+	font-weight: 700;
+}
+
+h3.recipe-name {
+	color: #5bc0de;
 }
 
 /* Start Home Styling*/
@@ -33,7 +52,13 @@ input.recipe-lookup {
 
 .row.recipe-item {
 	padding: 2%;
+	transition: .25s all;
 }
+
+.row.recipe-item:hover {
+	transform:  translateX(10px);
+}
+
 .row.recipe-item img {
     width: 85%;
     height: auto;
@@ -50,6 +75,11 @@ span.bigandbold {
 	font-size: 1.2em;
 }
 
+.empty-cart {
+	font-size: 3em;
+	text-align: center;
+}
+
 @media screen and (max-width: 767px) {
 	.react-col {
 		text-align: center;
@@ -57,5 +87,8 @@ span.bigandbold {
     .recipe-col {
         text-align: center;
     }
+    .row.recipe-item:hover {
+		transform:  rotate(.5deg);
+	}
 
 }
