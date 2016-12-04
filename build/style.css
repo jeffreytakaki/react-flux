@@ -10,6 +10,17 @@ nav {
 	background-color: #cceeff;
 	margin-bottom: 2%;
 }
+
+nav .logo-container {
+
+}
+
+nav .logo-container img{
+    height: 60px;
+    width: auto;
+    padding: 1%;
+}
+
 .react-col {
 	padding: 0;
 
