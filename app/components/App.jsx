@@ -1,5 +1,5 @@
 import React from 'react'
-import Sidebar from './Sidebar.jsx'
+import Featured from './Featured.jsx'
 import Home from '../pages/Home.jsx'
 import Profile from '../pages/Profile.jsx'
 import Nav from './Nav.jsx'
@@ -13,39 +13,11 @@ export default class App extends React.Component {
                 database: {},
                 firebase: {},
                 user:{},
-                savedRecipes: [],
-                saveRecipeFn: this.saveRecipe 
+                savedRecipes: []
 
         }
-
-        this.saveRecipe = this.saveRecipe.bind(this)
         
     }
-
-    componentWillMount() {
-
-    }
-
-    // signIn(event) {
-    //     firebaseSignIn().then(user => {
-    //         this.setState({
-    //             user: user
-    //         })
-    //     })
-    // }
-
-    saveRecipe(build) {
-        console.log(build)
-
-        RecipeActions.createRecipe(build)
-
-        // this.setState({
-        //     savedRecipes: this.state.savedRecipes.concat(build)
-        // })
-
-        console.log(this.state)
-    } 
-
 
 
     render () {
@@ -64,7 +36,7 @@ export default class App extends React.Component {
 
                     </div>
                     <div className="react-col col-md-3">
-                        <Sidebar />
+                        <Featured />
                     </div>
                 </div>
             </div>   

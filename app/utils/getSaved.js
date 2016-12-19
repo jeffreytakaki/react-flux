@@ -12,7 +12,10 @@ export default function getSaved(uid) {
                     recipe_id: k,
                     image: getsnap[k].image,
                     title: getsnap[k].title,
-                    url: getsnap[k].url
+                    url: getsnap[k].url,
+                    calories: getsnap[k].calories,
+                    completed: getsnap[k].completed,
+                    yield: getsnap[k].yield
                 }
                 saved.push(obj)
             }

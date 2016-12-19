@@ -14,6 +14,13 @@ export function getSavedRecipes(user) {
     });
 }
 
+export function getFeaturedRecipe() {
+    dispatcher.dispatch({
+        type: "RETRIEVE_FEATURED"
+    });
+}
+
+
 export function createRecipe(data) {
     dispatcher.dispatch({
         type: "CREATE_RECIPE",
@@ -28,9 +35,24 @@ export function deleteRecipe(id) {
     });
 }
 
+export function updateRecipe(id,status) {
+    dispatcher.dispatch({
+        type: "UPDATE_RECIPE",
+        id,
+        status
+    });
+}
+
 export function userLogin(event) {
     dispatcher.dispatch({
         type: "USER_LOGIN",
+        event,
+    });
+}
+
+export function userLogout(event) {
+    dispatcher.dispatch({
+        type: "USER_LOGOUT",
         event,
     });
 }

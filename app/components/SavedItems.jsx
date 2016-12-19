@@ -4,7 +4,7 @@ export default class SavedItems extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-		
+			showcomplete: this.props.completed
 		}
 		this.handleDelete = this.handleDelete.bind(this)
 		this.handleComplete = this.handleComplete.bind(this)
@@ -12,20 +12,26 @@ export default class SavedItems extends React.Component {
 
 	handleDelete(event) {
 		let del_id = event.target.parentNode.parentNode.parentNode.parentNode.dataset.recipe_id
-		let recipe_key = event.target.parentNode.parentNode.parentNode.parentNode.dataset.recipe_key
-		let deleteObj = {
-			recipe_key: recipe_key,
-			recipe_id: del_id
-		}
-		this.props.deleteRecipe(deleteObj)
+		this.props.deleteRecipe(del_id)
 	}
 
 	handleComplete(event) {
-		this.props.completedRecipe()	
+		let status = event.target.value
+		status = (status == "true") ? false : true
+		let recipeId = event.target.id
+
+		this.props.completedRecipe(recipeId,status)	
+
+		this.setState({
+			showcomplete: status
+		})
 	}
 
-
 	render() {
+
+
+
+
 		return (
 			<div className="row recipe-item" data-recipe_key={this.props.recipe_key} data-recipe_id={this.props.recipe_id} data-title={this.props.title} data-url={this.props.url} data-image={this.props.image}>
 				<div className="col-md-2 recipe-col">
@@ -36,10 +42,13 @@ export default class SavedItems extends React.Component {
 				</div>
 				<div className="col-md-2 recipe-col savedItemAction">
 					<div className="row">
-						<div className="col-md-12">
-							<input type="checkbox" />
+						<div className="col-md-6 saved-input">
+							<label htmlFor={this.props.recipe_id} className="completed-recipe">
+								<i className="fa fa-check-circle-o" aria-hidden="true"></i>
+							</label>
+							<input type="checkbox" visibility="hidden" checked={(this.state.showcomplete) ? 'checked' : ''} id={this.props.recipe_id}  onChange={this.handleComplete}  value = {this.state.showcomplete} />
 						</div>
-						<div className="col-md-12">
+						<div className="col-md-6 saved-trash">
 							<i onClick={this.handleDelete} className="fa fa-trash-o" aria-hidden="true"></i>
 						</div>
 					</div>		

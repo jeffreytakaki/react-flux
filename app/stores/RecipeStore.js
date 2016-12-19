@@ -9,8 +9,13 @@ class RecipeStore extends EventEmitter {
         super()
         this.recipes = []
         this.saved = []
-        this.user = []
+        this.user = this.getInitial() || []
+        this.featured = {}
       
+    }
+
+    getInitial() {
+        return firebase.auth().currentUser
     }
 
     searchRecipes(search) {
@@ -22,74 +27,171 @@ class RecipeStore extends EventEmitter {
 
     }
 
+    queryFeaturedRecipe() {
+        // get featured recipe of the day. random selection based on combinations array;
+        let self = this
+        if(self.featured.length == undefined) {
+            let combinations = ['fish','chicken','beef','lamb','cookies','yellow cake','pancakes','waffles','turkey','garlic']
+            let min = 0
+            let max = 9
+            let random = Math.floor(Math.random() * (max - min + 1)) + min
+
+            getRecipes(combinations[random]).then(results => {
+                self.featured = results[random].recipe
+                self.emit("featured")
+            })   
+        }  
+    }
+
+
     login(action) {
         if(!firebase.auth().currentUser) {
+
             firebaseSignIn().then(user => {
                 this.user = user
+                
                 getSaved(this.user.uid).then(results => {
                     this.saved = results
                     this.emit("userChange")        
                 })
             })
+
         } else {
-            firebase.auth().signOut()
+            this.user = firebase.auth().currentUser
+            getSaved(this.user.uid).then(results => {
+                this.saved = results
+                this.emit("userChange")        
+            })
         }
 
     }
 
+    logout(action) {
+        firebase.auth().signOut()
+        this.user=[]
+        this.saved=[]
+        this.emit("userChange")        
+
+    }
+
     createRecipe(data) {
-        console.log(data)
 
-        this.saved.push({
-            image: data.data.image,
-            title: data.data.title,
-            url: data.data.url,
-            recipe_id: data.data.key,
-            completed: false
-        });
+        if(firebase.auth().currentUser) { 
+            
+            this.saved.push({
+                image: data.data.image,
+                title: data.data.title,
+                url: data.data.url,
+                recipe_id: data.data.recipe_id,
+                calories: data.data.calories,
+                yield: data.data.yield,
+                completed: false
+            })
 
-        this.emit("change");
+            firebase.database().ref('save-recipe/' + this.user.uid).push({
+                image: data.data.image,
+                title: data.data.title,
+                url: data.data.url,
+                recipe_id: data.data.recipe_id,
+                calories: data.data.calories,
+                yield: data.data.yield,
+                completed: false,
+            })
+
+
+            this.emit("recipe-item")
+        }
+
+        
     }
 
-  getSearchResults() {
-    return this.recipes;
-  }
+    updateRecipe(id,status) {
+        let self = this
+        firebase.database().ref('save-recipe/' + this.user.uid + '/' + id).update({
+            completed: status,
+        }).then(function() {
 
-  retrieveSaved() {
-    return this.saved
-  }
+            self.saved.forEach(function(current, index) {
+                if(current.recipe_id == id) {
+                    current.completed = status
+                }
+            })
 
-  getUser() {
-    return this.user
-  }
+            self.emit("recipe-item")   
+        })
 
-  handleActions(action) {
-    switch(action.type) {
-      case "SEARCH_RECIPE": {
-        this.searchRecipes(action);
-        this.emit("change");
-        break;
-      }
-      case "CREATE_RECIPE": {
-        this.createRecipe(action);
-        break;
-      }
-      case "RETRIEVE_RECIPE": {
-        this.retrieveRecipes(this.user.uid)
-        this.emit("change");
-        break;
-      }
-      case "DELETE_RECIPE": {
-        this.recipes = action.recipes;
-        this.emit("change");
-        break;
-      }
-      case "USER_LOGIN": {
-        this.login(action);
-        break;
-      }
     }
-  }
+
+    deleteRecipe(id) {
+        let self = this
+
+        firebase.database().ref('save-recipe/' + this.user.uid + '/' + id).remove()
+
+        this.saved.forEach((current,index) => {
+            if(current.recipe_id == id) {
+                self.saved.splice(index, 1)
+                self.emit("recipe-item")
+            }
+        })
+    }
+
+    getSearchResults() {
+        return this.recipes
+    }
+
+    getFeaturedRecipe() {
+        return this.featured
+    }
+
+    retrieveSaved() {
+        return this.saved
+    }
+
+    getUser() {
+        return this.user
+    }
+
+    handleActions(action) {
+        switch(action.type) {
+            case "SEARCH_RECIPE": {
+                this.searchRecipes(action);
+                this.emit("change");
+                break;
+            }
+            case "CREATE_RECIPE": {
+                this.createRecipe(action);
+                break;
+            }
+            case "RETRIEVE_RECIPE": {
+                this.retrieveRecipes(this.user.uid)
+                this.emit("change");
+                break;
+            }
+            case "RETRIEVE_FEATURED": {
+                this.queryFeaturedRecipe()
+                this.emit("change");
+                break;
+            }
+            case "DELETE_RECIPE": {
+                this.deleteRecipe(action.id)
+                this.emit("change");
+                break;
+            }
+            case "UPDATE_RECIPE": {
+                this.updateRecipe(action.id,action.status)
+                this.emit("change");
+                break;
+            }
+            case "USER_LOGIN": {
+                this.login(action);
+                break;
+            }
+            case "USER_LOGOUT": {
+                this.logout(action);
+                break;
+            }
+        }
+    }
 
 }
 

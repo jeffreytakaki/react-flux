@@ -4,6 +4,10 @@ body {
 	font-family: 'Raleway', sans-serif;
 }
 
+.fa {
+    font-size: 1.75em;
+}
+
 /* Start Nav Styling */
 nav {
 	padding: 2px;
@@ -89,6 +93,36 @@ span.bigandbold {
 .empty-cart {
 	font-size: 3em;
 	text-align: center;
+}
+
+.savedItemAction .saved-input input {
+	display: none;
+}
+
+input[value="true"] + label > .fa {
+  color: yellow;
+  font-size: 2em;
+} 
+
+
+/* Featured Area */
+
+.featured-container {
+	text-align: center;
+	margin; 0 auto;
+	background-color: #cceeff;
+	padding: 5% 0;
+}
+
+.featured-day-title {
+	margin-bottom: 5%;
+}
+
+.featured-image img {
+    height: auto;
+    margin: 0 auto;
+    text-align: center;
+    width: 80%;
 }
 
 @media screen and (max-width: 767px) {

@@ -8,19 +8,42 @@ export default class Nav extends React.Component {
         super(props)
         this.state = {
             LoggedIn: 'Sign In',
-            user: {}
+            user: firebase.auth().currentUser || {}
         }
 
-        this.handleSignIn = this.handleSignIn.bind(this)
+        this.handleAuth = this.handleAuth.bind(this)
         this.getUser = this.getUser.bind(this)
     }
 
     componentWillMount() {
         RecipeStore.on('userChange',this.getUser)
+
     }
 
-    handleSignIn(event) {
-        RecipeAction.userLogin(event)
+    componentDidMount() {
+        let counter = 0
+
+        let checkuser = setInterval(function() {
+            if(firebase.auth().currentUser) {
+                RecipeAction.userLogin(event)
+                clearInterval(checkuser)
+            } else {
+                counter++
+                if(counter >= 3) {
+                    clearInterval(checkuser)
+                }
+            } 
+        },500)
+        
+    }
+
+    handleAuth(event) {
+        if(this.state.user.uid == undefined) {
+            RecipeAction.userLogin(event)
+        } else {
+            RecipeAction.userLogout(event)
+        }
+
     }
 
     getUser(user) {
@@ -35,8 +58,8 @@ export default class Nav extends React.Component {
             <nav>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="react-col col-md-6">
-                            <h1>N A V</h1>
+                        <div className="react-col col-md-6 logo-container">
+                            <img src="images/recipe-logo.png" alt="recipe finder" />
                         </div>
                         <div className="react-col col-md-6">
                             <div className="container-fluid">
@@ -47,7 +70,7 @@ export default class Nav extends React.Component {
                                     </div>
                                     <div className="react-col col-md-6">
                                         <div className="nav-link-col">
-                                            <button className="btn btn-primary sign-in-button" onClick={this.handleSignIn}>{ (this.state.user.uid == undefined) ? 'Sign In' : 'Sign Out' }</button>
+                                            <button className="btn btn-primary sign-in-button" onClick={this.handleAuth}>{ (this.state.user.uid == undefined) ? 'Sign In' : 'Sign Out' }</button>
                                         </div>
                                         <div className="nav-link-col"><img src={this.state.user.photoURL} /></div>
                                               

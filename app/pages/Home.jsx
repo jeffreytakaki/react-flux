@@ -1,7 +1,7 @@
 import React from 'react'
 import RecipeItem from '../components/RecipeItem.jsx'
 import RecipeStore from '../stores/RecipeStore'
-import * as RecipeAction from "../actions/RecipeActions"
+import * as RecipeActions from "../actions/RecipeActions"
     
 export default class Home extends React.Component {
     constructor(props) {
@@ -16,11 +16,11 @@ export default class Home extends React.Component {
         this.saveRecipe = this.saveRecipe.bind(this)
         this.displaySearch = this.displaySearch.bind(this)
 
-        
+        RecipeStore.on('search', this.displaySearch)
     }
 
     componentWillMount() {
-        RecipeStore.on('search', this.displaySearch)
+        this.displaySearch()
     }
 
     saveIngredients(event) {
@@ -31,7 +31,7 @@ export default class Home extends React.Component {
 
     searchRecipes() {
         let search = this.state.ingredients
-        RecipeAction.searchRecipe(search)
+        RecipeActions.searchRecipe(search)
     }
 
     displaySearch() {
@@ -41,7 +41,7 @@ export default class Home extends React.Component {
     }
 
     saveRecipe(build) {
-        this.props.saveRecipeFn(build)
+        RecipeActions.createRecipe(build)
     } 
 
     render () {
@@ -54,17 +54,18 @@ export default class Home extends React.Component {
                 title = {recipe.recipe.label}
                 recipe_id = {recipe.recipe.label} 
                 url = {recipe.recipe.url}
+                calories = {recipe.recipe.calories}
+                yield = {recipe.recipe.yield}
                 saveRecipe={this.saveRecipe}/>
             )
         })
-
 
         return (
             
             <div className="container-fluid">
                 <div className="row search-container">
                     <div className="react-col col-md-12">
-                        <input className="recipe-lookup" placeholder="Look up ingredients" onChange={this.saveIngredients} value={this.state.ingredients}/>
+                        <input className="recipe-lookup" placeholder="Enter 3 ingredients" onChange={this.saveIngredients} value={this.state.ingredients}/>
                     </div>
                     <div className="react-col col-md-12">
                         <button className="btn btn-primary" onClick={this.searchRecipes}>Search Recipes</button>
