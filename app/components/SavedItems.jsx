@@ -29,9 +29,6 @@ export default class SavedItems extends React.Component {
 
 	render() {
 
-
-
-
 		return (
 			<div className="row recipe-item" data-recipe_key={this.props.recipe_key} data-recipe_id={this.props.recipe_id} data-title={this.props.title} data-url={this.props.url} data-image={this.props.image}>
 				<div className="col-md-2 recipe-col">
@@ -43,10 +40,10 @@ export default class SavedItems extends React.Component {
 				<div className="col-md-2 recipe-col savedItemAction">
 					<div className="row">
 						<div className="col-md-6 saved-input">
+							<input type="checkbox" visibility="hidden" checked={(this.state.showcomplete) ? 'checked' : ''} id={this.props.recipe_id}  onChange={this.handleComplete}  value = {this.state.showcomplete} />
 							<label htmlFor={this.props.recipe_id} className="completed-recipe">
 								<i className="fa fa-check-circle-o" aria-hidden="true"></i>
 							</label>
-							<input type="checkbox" visibility="hidden" checked={(this.state.showcomplete) ? 'checked' : ''} id={this.props.recipe_id}  onChange={this.handleComplete}  value = {this.state.showcomplete} />
 						</div>
 						<div className="col-md-6 saved-trash">
 							<i onClick={this.handleDelete} className="fa fa-trash-o" aria-hidden="true"></i>

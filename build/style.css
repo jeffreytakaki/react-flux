@@ -100,8 +100,8 @@ span.bigandbold {
 }
 
 input[value="true"] + label > .fa {
-  color: yellow;
-  font-size: 2em;
+	color: lightgreen;
+	font-size: 2.5em;
 } 
 
 
