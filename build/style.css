@@ -1,3 +1,14 @@
+div.results {
+	position: absolute;
+	top: 0;
+	z-index: -100
+}	
+
+#app {
+	background-color: white;
+	z-index: 100
+}
+
 /* Global */
 
 body {
